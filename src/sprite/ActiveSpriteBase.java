@@ -13,6 +13,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
+import main.Settings;
 
 public abstract class ActiveSpriteBase extends SpriteBase {
 
@@ -164,8 +165,8 @@ public abstract class ActiveSpriteBase extends SpriteBase {
     	new ColorInput(
     			0,
                 0,
-                imageView.getImage().getWidth(),
-                imageView.getImage().getHeight(),
+                Settings.PLAYER_WIDTH,
+                Settings.PLAYER_HEIGHT,
                 Color.RED
             )
     );

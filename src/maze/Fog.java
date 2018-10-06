@@ -4,6 +4,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import sprite.NodeBase;
+import sprite.SpriteBase;
 
 public class Fog extends NodeBase {
 
@@ -18,6 +19,7 @@ public class Fog extends NodeBase {
 		box.setWidth(width);
 		box.setHeight(height);
 		box.setFill(Color.BLACK);
+		box.setOpacity(0.6);
 		box.setVisible(true);
 		
 		addToLayer();

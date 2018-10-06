@@ -106,8 +106,6 @@ public class Main extends Application {
 	    
         createGameLoop();
         root.getChildren().add(camera);
-        //root.getChildren().add(playLayer);
-        //root.getChildren().add(uiLayer);
         //createMenuLoop();
         //root.getChildren().add(menuLayer);
         //menuLoop.start();
@@ -402,6 +400,12 @@ public class Main extends Application {
         	}
         }
         
+        for( Fog f : fog) {  
+        	if( player.collidesWith(f)) {  
+        		f.remove();
+            }
+        }
+        
         if (player.collidesWith(door)) {
         	try {
 				levelUp();
@@ -418,8 +422,8 @@ public class Main extends Application {
 		player.setCanMove(false);
     	//gameLoop.wait(5000);
     	clearLevel();
-    	//gameLoop.start();
-    	//loadLevel();
+    	gameLoop.start();
+    	loadLevel();
     	player.setCanMove(true);
 	}
 	

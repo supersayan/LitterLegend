@@ -118,7 +118,7 @@ public class Player extends ActiveSpriteBase {
     public void stun(long duration) {
     	imageView.setEffect(hurt);
         if(state > 3) {
-        	setState(state - 4);
+        	setState(state - 4); //change state to stand still
         }
     	canMove = false;
         timer.schedule(new TimerTask() {
