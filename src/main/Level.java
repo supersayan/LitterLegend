@@ -1,5 +1,7 @@
 package main;
 
+import java.util.Random;
+
 import maze.Corner;
 import maze.Door;
 import maze.Fog;
@@ -20,7 +22,9 @@ public class Level {
 	}
 	
 	private void loadLevel() {
-        
+		
+		Random rand = new Random();
+		
         startIndex = rand.nextInt(5*level);
         endIndex = rand.nextInt(5*level);
         
