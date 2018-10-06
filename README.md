@@ -1,3 +1,3 @@
-# MazeRogue
-an rpg idea based off the 2d maze runner I made during miniterm
+# Litter Legend
+Recycling mini-game for HackNC 2018, 2019 MLH season.
 
