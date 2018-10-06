@@ -32,7 +32,8 @@ public class Main extends Application {
 	
 	//private static final Logger LOG = Logger.getLogger(Main.class.getName());
 	
-	static int levelnum = 1;
+	static int levelnum;
+	static int playerlives;
 	//Level level;
 
 	Pane menuLayer;
@@ -166,6 +167,9 @@ public class Main extends Application {
         
         playLayer.setStyle("-fx-background-image: url('assets/environment/background.png');");
 		
+        levelnum = 1;
+        playerlives = 3;
+        
         loadLevel();
     }
 	
