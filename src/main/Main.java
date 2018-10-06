@@ -20,8 +20,8 @@ import maze.Door;
 import maze.Fog;
 import maze.Maze;
 import maze.Wall;
-import sprite.Bat;
-import sprite.Nomster;
+import sprite.TrashBin;
+import sprite.Bin;
 import sprite.Player;
 
 /**
@@ -61,7 +61,7 @@ public class Main extends Application {
 	
 	ArrayList<String> input = new ArrayList<String>();
 	
-	List<Nomster> nomsters = new ArrayList<>();
+	List<Bin> bins = new ArrayList<>();
 	List<Wall> walls = new ArrayList<>();
 	List<Corner> corners = new ArrayList<>();
 	List<Fog> fog = new ArrayList<>();
@@ -217,7 +217,7 @@ public class Main extends Application {
         for (int i=0; i<mazeSize; i++) {
         	for (int j=0; j<mazeSize; j++) {
         		if (rand.nextDouble()<Settings.NOM1_CHANCE)
-        			nomsters.add(new Bat(playLayer, batImage, (320*i)+192-(45/2)+offset, (320*j)+192-(48/2)+offset, (rand.nextDouble()>0.5)?4:-4, (rand.nextDouble()>0.5)?4:-4, 1, 45, 48));
+        			bins.add(new TrashBin(playLayer, batImage, (320*i)+192-(45/2)+offset, (320*j)+192-(48/2)+offset, (rand.nextDouble()>0.5)?4:-4, (rand.nextDouble()>0.5)?4:-4, 1, 45, 48));
         	}
         }
         
@@ -255,11 +255,11 @@ public class Main extends Application {
 
 	private void clearLevel() { //clear map
 		playLayer.getChildren().clear();
-		for (Nomster nom : nomsters) {
+		for (Bin nom : bins) {
 			nom.remove();
 			//nomsters.remove(nom);
 			//nom = null;
-		}nomsters.clear();
+		}bins.clear();
 		for (Wall w : walls) {
 			w.remove();
 			//walls.remove(w);
@@ -280,7 +280,7 @@ public class Main extends Application {
 	
 	private void moveSprites() { //move player and nomsters
 		player.move();
-		for(Nomster nom : nomsters) {
+		for(Bin nom : bins) {
 			nom.move();
 		}
 	}
@@ -317,7 +317,7 @@ public class Main extends Application {
 			w.update();
 		for (Corner c : corners)
 			c.update();
-        for (Nomster n : nomsters)
+        for (Bin n : bins)
         	n.update();
 	}
 	
@@ -337,7 +337,7 @@ public class Main extends Application {
 				fog.remove(f);
 				f = null;
 			}
-		for (Nomster nom : nomsters)
+		for (Bin nom : bins)
 			if (nom.isRemovable()) {
 				nom.remove();
 				nom = null;
@@ -377,7 +377,7 @@ public class Main extends Application {
         	if( player.collidesWith(w)) {
         		player.handleCollision(w);
             }
-        	for (Nomster nom: nomsters) {
+        	for (Bin nom: bins) {
         		if( nom.collidesWith(w)) {
             		nom.handleCollision(w);
                 }
@@ -388,19 +388,19 @@ public class Main extends Application {
         	if( player.collidesWith(c)) {
         		player.handleCollision(c);
             }
-        	for (Nomster nom: nomsters) {
+        	for (Bin nom: bins) {
         		if( nom.collidesWith(c)) {
             		nom.handleCollision(c);
                 }
         	}
         }
         
-        for( Nomster nom: nomsters) {  
+        for( Bin nom: bins) {  
         	if( player.collidesWith(nom)) {  
         		player.handleCollision(nom);
         		nom.handleCollision(player);
             }
-        	for (Nomster nom2: nomsters) {
+        	for (Bin nom2: bins) {
         		if( nom2.collidesWith(nom)) {
             		nom2.handleCollision(nom);
             		nom.handleCollision(nom2);

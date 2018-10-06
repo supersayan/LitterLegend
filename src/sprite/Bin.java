@@ -5,9 +5,9 @@ import maze.Wall;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 
-public abstract class Nomster extends ActiveSpriteBase {
+public abstract class Bin extends ActiveSpriteBase {
 
-	public Nomster(Pane layer, Image image, double x, double y, double dx,
+	public Bin(Pane layer, Image image, double x, double y, double dx,
 			double dy, double health, double damage, int[] duration, int[] count,
 			double width, double height) {
 		super(layer, image, x, y, dx, dy, health, damage, duration, count,
