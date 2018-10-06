@@ -120,7 +120,7 @@ public class Main extends Application {
 	
 	private void createGameLoop() {
 		
-		gameLoop = new AnimationTimer() {  
+		gameLoop = new AnimationTimer() { 
 		
 			@Override  
 			public void handle(long l) {  
@@ -182,8 +182,8 @@ public class Main extends Application {
         player = new Player(playLayer, playerImage, (192)+offset, (192+startIndex*320)+offset, Settings.PLAYER_HEALTH, 0, Settings.PLAYER_SPEED);
 		maze = new Maze(mazeSize);
 		
-        playLayer.setMinSize(64+320*(mazeSize)+2*offset, 64+1600*levelnum+2*offset);
-        playLayer.setMaxSize(64+320*(mazeSize)+2*offset, 64+1600*levelnum+2*offset);
+        playLayer.setMinSize(64+320*(mazeSize)+2*offset, 64+320*mazeSize+2*offset);
+        playLayer.setMaxSize(64+320*(mazeSize)+2*offset, 64+320*mazeSize+2*offset);
 
 	    camera.setHmax(64+320*(mazeSize)+2*offset-Settings.SCENE_WIDTH);
 	    camera.setVmax(64+320*(mazeSize)+2*offset-Settings.SCENE_HEIGHT);
@@ -246,10 +246,10 @@ public class Main extends Application {
         }*/
 
         //add fog outside play area:
-        fog.add(new Fog(playLayer, 0, 0, 2*offset+64+1600*levelnum, offset));
-        fog.add(new Fog(playLayer, 0, offset, offset, 64+1600*levelnum));
-        fog.add(new Fog(playLayer, offset+64+1600*levelnum, offset, offset, 64+1600*levelnum));
-        fog.add(new Fog(playLayer, 0, offset+64+1600*levelnum, 2*offset+64+1600*levelnum, offset));
+        fog.add(new Fog(playLayer, 0, 0, 2*offset+64+320*(mazeSize), offset));
+        fog.add(new Fog(playLayer, 0, offset, offset, 64+320*(mazeSize)));
+        fog.add(new Fog(playLayer, offset+64+320*(mazeSize), offset, offset, 64+320*(mazeSize)));
+        fog.add(new Fog(playLayer, 0, offset+64+320*(mazeSize), 2*offset+64+320*(mazeSize), offset));
         
 	}
 
