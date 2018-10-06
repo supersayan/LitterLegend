@@ -34,7 +34,7 @@ public class Door extends NodeBase {
     }
 
 	@Override
-	public void updateUI() {
+	public void update() {
 		// TODO Auto-generated method stub
 		
 	}

@@ -67,7 +67,7 @@ public abstract class NodeBase {
         this.removable = removable;
     }
     
-    public abstract void updateUI();
+    public abstract void update();
 
     public double getWidth() {
         return w;

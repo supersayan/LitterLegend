@@ -73,7 +73,7 @@ public abstract class SpriteBase extends NodeBase {
         return imageView;
     }
 
-    public void updateUI() {
+    public void update() {
         imageView.relocate(x, y);
     }
     

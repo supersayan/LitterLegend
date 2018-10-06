@@ -17,5 +17,16 @@ public class Settings {
     
     public static double NOM1_CHANCE = 0.05;
     public static double NOM2_CHANCE = 0.01;
+    
+    public static final String UP = "W";
+    public static final String DOWN = "S";
+    public static final String LEFT = "A";
+    public static final String RIGHT = "D";
+    
+    public static final char MAX_LIVES = 3;
+    
+    //public static final int LEVEL_SIZE_MULT = 5;
+    public static final int LEVEL_SIZE_ADD = 0; //add size by this for each level
+    public static final int LEVEL_SIZE_START = 5; //size of level one
 
 }

@@ -39,33 +39,33 @@ public class Player extends ActiveSpriteBase {
     	if (this.canMove == false) {
     		return;
     	}
-    	if (input.contains("A")) {
-        	if (input.contains("D")) {
+    	if (input.contains(Settings.LEFT)) {
+        	if (input.contains(Settings.RIGHT)) {
         		moveX(0);
         	} else {
 	            moveX(-1);
-	            if (!(input.contains("W") || input.contains("S")))
+	            if (!(input.contains(Settings.UP) || input.contains(Settings.DOWN)))
 	            	setState(5);
         	}
 	    } else {
-        	if (input.contains("D")) {
+        	if (input.contains(Settings.RIGHT)) {
         		moveX(1);
-        		if (!(input.contains("W") || input.contains("S")))
+        		if (!(input.contains(Settings.UP) || input.contains(Settings.DOWN)))
         			setState(7);
         	} else {
  	            moveX(0);
         	}
         }
         
-        if (input.contains("W")) {
-        	if (input.contains("S")) {
+        if (input.contains(Settings.UP)) {
+        	if (input.contains(Settings.DOWN)) {
         		moveY(0);
         	} else {
         		moveY(-1);
         		setState(6);
         	}
         } else {
-        	if (input.contains("S")) {
+        	if (input.contains(Settings.DOWN)) {
         		moveY(1);
     			setState(4);
         	} else {
@@ -88,8 +88,8 @@ public class Player extends ActiveSpriteBase {
     }
     
     @Override
-    public void updateUI() {
-        super.updateUI();
+    public void update() {
+        super.update();
         if (animation[state].getStatus() != Animation.Status.RUNNING)
         	animation[state].play();
     }
@@ -98,40 +98,45 @@ public class Player extends ActiveSpriteBase {
     public void handleCollision(SpriteBase otherSprite) {
     	if (otherSprite instanceof Wall || otherSprite instanceof Corner) {
     		if (!((otherSprite.getY() + otherSprite.getHeight()) > py && otherSprite.getY() < (py + h))) {
+    			//if player hits a wall from top or bottom, stop moving
     			y = py;
     		}
     		else if (!((otherSprite.getX() + otherSprite.getWidth()) > px && otherSprite.getX() < (px + w))) {
+    			//if player hits a wall from left or right
     			x = px;
     		} else {
+    			//both
     			x = px;
     			y = py;
     		}
-    	} else if (otherSprite instanceof Nomster) {
+    	} else if (otherSprite instanceof Nomster) { //if player hit a Nomster
     		stun(1);
     	}
     }
     
     public void death() {
-    	
+    	//TODO
     }
     
     public void stun(long duration) {
-    	imageView.setEffect(hurt);
+    	//run this when stunned
+    	imageView.setEffect(hurt); //set Blend hurt as effect (in ActiveSpriteBase)
         if(state > 3) {
         	setState(state - 4); //change state to stand still
         }
-    	canMove = false;
-        timer.schedule(new TimerTask() {
+    	canMove = false; //player cannot move
+        timer.schedule(new TimerTask() { //set a timer
         	@Override
         	public void run() {
         		Platform.runLater(new Runnable() {
         			public void run() {
+        				//run this when complete
         				canMove = true;
         				imageView.setEffect(null);
         			}
         		});
         	}
-        }, duration*1000);
+        }, duration*1000); //convert millisec to sec
     }
 
     @Override

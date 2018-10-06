@@ -74,8 +74,8 @@ public abstract class ActiveSpriteBase extends SpriteBase {
     }
     
     @Override
-    public void updateUI() {
-    	super.updateUI();
+    public void update() {
+    	super.update();
         if (animation[state].getStatus() != Animation.Status.RUNNING)
         	animation[state].play();
     }

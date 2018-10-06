@@ -33,7 +33,7 @@ public class Main extends Application {
 	//private static final Logger LOG = Logger.getLogger(Main.class.getName());
 	
 	static int levelnum = 1;
-	Level level;
+	//Level level;
 
 	Pane menuLayer;
 	Pane playLayer;
@@ -53,6 +53,7 @@ public class Main extends Application {
 	private AnimationTimer gameLoop;
 	//private AnimationTimer menuLoop;
 	
+	//offset variable for location of player relative to screen
 	double offset = (Settings.SCENE_WIDTH-64-Settings.PLAYER_WIDTH/2);
 	
 	//private boolean gamePaused = false;
@@ -79,38 +80,38 @@ public class Main extends Application {
 	}
 	
 	public void start(Stage stage) {
-		root = new Group();
-	    menuLayer = new Pane();
-		playLayer = new Pane();
-	    uiLayer = new Pane();
+		root = new Group(); //group containing main game layers (camera, which is a scrollPane of playLayer, and UI)
+	    menuLayer = new Pane(); //unimplemented, nothing actually here
+		playLayer = new Pane(); // pane containing sprites, environment
+	    uiLayer = new Pane(); //unimplemented, nothing actually here
 	    
 	    
-	    camera = new ScrollPane(playLayer);
+	    camera = new ScrollPane(playLayer); //pane that you view from, contains all of playLayer and views a part of it
 	    camera.setHmin(0);
 	    //camera.setHmax(64+1600*level);
 	    camera.setVmin(0);
 	    //camera.setVmax(64+1600*level-camera.getHeight());
 	    camera.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-	    camera.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+	    camera.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); // no scrollbars
 	    camera.setPannable(false);
-	    camera.setPrefSize(Settings.SCENE_WIDTH, Settings.SCENE_HEIGHT);
+	    camera.setPrefSize(Settings.SCENE_WIDTH, Settings.SCENE_HEIGHT); //set size of view pane
 	    
-	    scene = new Scene(root);
+	    scene = new Scene(root); //add root to scene
 	    
 	    stage.initStyle(StageStyle.DECORATED);
 	    stage.setWidth(Settings.SCENE_WIDTH);
-	    stage.setHeight(Settings.SCENE_HEIGHT);
-	    stage.setScene(scene);
+	    stage.setHeight(Settings.SCENE_HEIGHT); //set size of app
+	    stage.setScene(scene); //add scene to stage
 		stage.setResizable(false);
-        stage.show();
+        stage.show(); // show everything
 	    
-        createGameLoop();
-        root.getChildren().add(camera);
+        createGameLoop(); //create AnimationTimer class "gameLoop" which constantly runs while you're playing
+        root.getChildren().addAll(camera, uiLayer); //add camera and UI to root
         //createMenuLoop();
         //root.getChildren().add(menuLayer);
         //menuLoop.start();
         
-	    loadGame();
+	    loadGame(); //load game images and maze
 		
 		gameLoop.start();
 
@@ -125,17 +126,17 @@ public class Main extends Application {
 				
 				//System.out.println("x: " + player.getX() + ", y: " + player.getY());
 
-				handleKeys();
+				handleKeys(); //handle input keys
 	 
-	            moveSprites();
+	            moveSprites(); //
 	            
-	            checkCollisions();
+	            checkCollisions(); //check for collisions between sprites or nodes
 	            
-	            updateUI();
+	            updateObjects(); //
 	            
-	            updateCam();
+	            updateCam(); //
 	            
-	            checkRemovables();
+	            checkRemovables(); //removes all objects that are set to removable
 	            
 		 	}
 		 };
@@ -156,6 +157,7 @@ public class Main extends Application {
 	}*/
 	
 	private void loadGame() {
+		//put images in variables
         playerImage = new Image( getClass().getResource("/assets/link.png").toExternalForm());
         cornerImage = new Image( getClass().getResource("/assets/environment/corner.png").toExternalForm());
         wallVImage = new Image( getClass().getResource("/assets/environment/vertical.png").toExternalForm());
@@ -168,37 +170,38 @@ public class Main extends Application {
     }
 	
 	private void loadLevel() {
+		int mazeSize = Settings.LEVEL_SIZE_START + (levelnum * Settings.LEVEL_SIZE_ADD); //calculate size of level
 		
-        int startIndex = rand.nextInt(5*levelnum);
-        int endIndex = rand.nextInt(5*levelnum);
+        int startIndex = rand.nextInt(mazeSize);
+        int endIndex = rand.nextInt(mazeSize);
         
         player = new Player(playLayer, playerImage, (192)+offset, (192+startIndex*320)+offset, Settings.PLAYER_HEALTH, 0, Settings.PLAYER_SPEED);
-		maze = new Maze(levelnum*5);
+		maze = new Maze(mazeSize);
 		
-        playLayer.setMinSize(64+1600*levelnum+2*offset, 64+1600*levelnum+2*offset);
-        playLayer.setMaxSize(64+1600*levelnum+2*offset, 64+1600*levelnum+2*offset);
+        playLayer.setMinSize(64+320*(mazeSize)+2*offset, 64+1600*levelnum+2*offset);
+        playLayer.setMaxSize(64+320*(mazeSize)+2*offset, 64+1600*levelnum+2*offset);
 
-	    camera.setHmax(64+1600*levelnum+2*offset-Settings.SCENE_WIDTH);
-	    camera.setVmax(64+1600*levelnum+2*offset-Settings.SCENE_HEIGHT);
+	    camera.setHmax(64+320*(mazeSize)+2*offset-Settings.SCENE_WIDTH);
+	    camera.setVmax(64+320*(mazeSize)+2*offset-Settings.SCENE_HEIGHT);
 
-        door = new Door(playLayer, 320*(levelnum*5-1)+142+offset, 320*(endIndex)+142+offset);
+        door = new Door(playLayer, 320*(mazeSize-1)+142+offset, 320*(endIndex)+142+offset);
         
-        for (int i=0; i<5*levelnum+1; i++) {
-        	for (int j=0; j<5*levelnum+1; j++) { //add corners
+        for (int i=0; i<mazeSize+1; i++) {
+        	for (int j=0; j<mazeSize+1; j++) { //add corners
         		corners.add(new Corner(playLayer, cornerImage, 320*i+offset, 320*j+offset));
         	}
         }
-        for (int i=0; i<5*levelnum; i++) { //add top row
+        for (int i=0; i<mazeSize; i++) { //add top row
         	walls.add(new Wall(playLayer, wallHImage, 64+320*i+offset, 0+offset, true));
         }
-        for (int i=0; i<(5*levelnum); i++) { //add other walls
+        for (int i=0; i<(mazeSize); i++) { //add other walls
         	walls.add(new Wall(playLayer, wallVImage, 0+offset, 64+320*i+offset, false));
-        	for (int j=0; j<5*levelnum; j++) {
+        	for (int j=0; j<mazeSize; j++) {
         		if (!(maze.get(i, j) == 0 && i+1 < 5*levelnum && maze.get(i+1, j) == 0) && ((maze.get(i, j) & 2) == 0))
         			walls.add(new Wall(playLayer, wallHImage, 64+320*j+offset, 320*(i+1)+offset, true));
         		
 				if ((maze.get(i, j) == 0 && j+1 < (5*levelnum) && maze.get(i, j+1) == 0)) {
-					if ((i+1 < 5*levelnum) && (maze.get(i+1, j) == 0 || maze.get(i+1, j+1) == 0))
+					if ((i+1 < mazeSize) && (maze.get(i+1, j) == 0 || maze.get(i+1, j+1) == 0))
 						walls.add(new Wall(playLayer, wallHImage, 64+320*j+offset, 320*(i+1)+offset, true));
 				} else if ((maze.get(i, j) & 4) != 0) {
 					if (((maze.get(i, j) | maze.get(i, j+1)) & 2) == 0)
@@ -207,8 +210,8 @@ public class Main extends Application {
 					walls.add(new Wall(playLayer, wallVImage, 320*(j+1)+offset, 64+320*i+offset, false));
             }
         }
-        for (int i=0; i<levelnum*5; i++) {
-        	for (int j=0; j<levelnum*5; j++) {
+        for (int i=0; i<mazeSize; i++) {
+        	for (int j=0; j<mazeSize; j++) {
         		if (rand.nextDouble()<Settings.NOM1_CHANCE)
         			nomsters.add(new Bat(playLayer, batImage, (320*i)+192-(45/2)+offset, (320*j)+192-(48/2)+offset, (rand.nextDouble()>0.5)?4:-4, (rand.nextDouble()>0.5)?4:-4, 1, 45, 48));
         	}
@@ -217,7 +220,7 @@ public class Main extends Application {
         //nomsters.add(new Bat(playLayer, batImage, 1600*level-192, (192+endIndex*320), (rand.nextDouble()>0.5)?6:-6, (rand.nextDouble()>0.5)?6:-6, 1, 45, 48));
         //nomsters.add(new Bat(playLayer, batImage, 192, (192+startIndex*320), (rand.nextDouble()>0.5)?6:-6, (rand.nextDouble()>0.5)?6:-6, 1, 45, 48));
         
-        /*for (int i=0; i<(5*levelnum); i++) { //add fog
+        /*for (int i=0; i<(5*levelnum); i++) { //add fog (low opacity black rectangles)
         	for (int j=0; j<(5*levelnum); j++) {
         		fog.add(new Fog(playLayer, 320*(j)+64+offset, 320*(i)+64+offset, 256, 256));
         	}
@@ -238,6 +241,7 @@ public class Main extends Application {
         	}
         }*/
 
+        //add fog outside play area:
         fog.add(new Fog(playLayer, 0, 0, 2*offset+64+1600*levelnum, offset));
         fog.add(new Fog(playLayer, 0, offset, offset, 64+1600*levelnum));
         fog.add(new Fog(playLayer, offset+64+1600*levelnum, offset, offset, 64+1600*levelnum));
@@ -245,7 +249,7 @@ public class Main extends Application {
         
 	}
 
-	private void clearLevel() {
+	private void clearLevel() { //clear map
 		playLayer.getChildren().clear();
 		for (Nomster nom : nomsters) {
 			nom.remove();
@@ -270,14 +274,14 @@ public class Main extends Application {
 		//door = null;
 	}
 	
-	private void moveSprites() {
+	private void moveSprites() { //move player and nomsters
 		player.move();
 		for(Nomster nom : nomsters) {
 			nom.move();
 		}
 	}
 	
-	private void handleKeys() {
+	private void handleKeys() { //
 		scene.setOnKeyPressed(
 	    	new EventHandler<KeyEvent>() {
 	        	public void handle(KeyEvent e) {
@@ -303,17 +307,17 @@ public class Main extends Application {
         
 	}
 	
-	private void updateUI() {
-		player.updateUI();
+	private void updateObjects() { 
+		player.update();
 		for (Wall w : walls)
-			w.updateUI();
+			w.update();
 		for (Corner c : corners)
-			c.updateUI();
+			c.update();
         for (Nomster n : nomsters)
-        	n.updateUI();
+        	n.update();
 	}
 	
-	private void checkRemovables() {
+	private void checkRemovables() { //removes objects that are set to removable
 		for (Wall w : walls)
 			if (w.isRemovable()) {
 				walls.remove(w);
@@ -337,7 +341,7 @@ public class Main extends Application {
 	}
 	
 	private void updateCam() {
-	    
+	    // set camera coordinates based on player position
 		cameraX = player.getX()-Settings.SCENE_WIDTH/2+Settings.PLAYER_WIDTH/2;
 		cameraY = player.getY()-Settings.SCENE_HEIGHT/2+Settings.PLAYER_HEIGHT/2;
 	    //cameraX = ((player.getX() )-64)*(camera.getHmax()/(camera.getHmax()-128-Settings.PLAYER_WIDTH-16));
@@ -364,7 +368,7 @@ public class Main extends Application {
 	}
 	
 	private void checkCollisions() {
-        
+        // if sprites collide delegate to their respective objects
         for( Wall w: walls) {  
         	if( player.collidesWith(w)) {
         		player.handleCollision(w);
@@ -418,6 +422,7 @@ public class Main extends Application {
     }
 	
 	private void levelUp() throws InterruptedException {
+		//increase level number, clear current level, and move to next
 		levelnum++;
 		player.setCanMove(false);
     	//gameLoop.wait(5000);
