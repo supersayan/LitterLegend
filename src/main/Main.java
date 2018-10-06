@@ -217,7 +217,7 @@ public class Main extends Application {
         //nomsters.add(new Bat(playLayer, batImage, 1600*level-192, (192+endIndex*320), (rand.nextDouble()>0.5)?6:-6, (rand.nextDouble()>0.5)?6:-6, 1, 45, 48));
         //nomsters.add(new Bat(playLayer, batImage, 192, (192+startIndex*320), (rand.nextDouble()>0.5)?6:-6, (rand.nextDouble()>0.5)?6:-6, 1, 45, 48));
         
-        for (int i=0; i<(5*levelnum); i++) { //add fog
+        /*for (int i=0; i<(5*levelnum); i++) { //add fog
         	for (int j=0; j<(5*levelnum); j++) {
         		fog.add(new Fog(playLayer, 320*(j)+64+offset, 320*(i)+64+offset, 256, 256));
         	}
@@ -236,7 +236,7 @@ public class Main extends Application {
         	for (int j=0; j<(5*levelnum)+2; j++) {
         		fog.add(new Fog(playLayer, 320*(j)+64+offset, 320*i+offset, 256, 64));
         	}
-        }
+        }*/
 
         fog.add(new Fog(playLayer, 0, 0, 2*offset+64+1600*levelnum, offset));
         fog.add(new Fog(playLayer, 0, offset, offset, 64+1600*levelnum));
