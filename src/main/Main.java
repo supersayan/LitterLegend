@@ -106,6 +106,8 @@ public class Main extends Application {
 	    
         createGameLoop();
         root.getChildren().add(camera);
+        //root.getChildren().add(playLayer);
+        //root.getChildren().add(uiLayer);
         //createMenuLoop();
         //root.getChildren().add(menuLayer);
         //menuLoop.start();
