@@ -219,11 +219,12 @@ public class Main extends Application {
 					walls.add(new Wall(playLayer, wallVImage, 320*(j+1)+offset, 64+320*i+offset, false));
             }
         }
-        for (int i=0; i<mazeSize; i++) {
-        	for (int j=0; j<mazeSize; j++) {
-        		if (rand.nextDouble()<Settings.NOM1_CHANCE)
-        			litters.add(new TrashLitter(playLayer, trashLitterImage, (320*i)+192-(45/2)+offset, (320*j)+192-(48/2)+offset, 0, 0, Settings.LITTER_WIDTH, Settings.LITTER_HEIGHT));
-        	}
+        
+        int numLitter = 1;
+        for (int x=0; x<numLitter; x++) {
+        	int i = rand.nextInt(mazeSize);
+        	int j = rand.nextInt(mazeSize);
+        	litters.add(new TrashLitter(playLayer, trashLitterImage, (320*i)+192-(45/2)+offset, (320*j)+192-(48/2)+offset, 0, 0, Settings.LITTER_WIDTH, Settings.LITTER_HEIGHT));
         }
 
         //add fog outside play area:
