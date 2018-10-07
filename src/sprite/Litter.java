@@ -5,13 +5,11 @@ import maze.Wall;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 
-public abstract class Litter extends ActiveSpriteBase {
+public abstract class Litter extends SpriteBase {
 
 	public Litter(Pane layer, Image image, double x, double y, double dx,
-			double dy, double health, double damage, int[] duration, int[] count,
-			double width, double height) {
-		super(layer, image, x, y, dx, dy, health, damage, duration, count,
-				width, height);
+			double dy, double width, double height) {
+		super(layer, image, x, y, dx, dy, width, height, false);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -37,8 +35,6 @@ public abstract class Litter extends ActiveSpriteBase {
         		y = py;
         		dy = -dy;
         	}
-    	} else if (otherSprite instanceof Player) {
-    		setState(1);
     	}
 	}
 	

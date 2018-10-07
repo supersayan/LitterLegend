@@ -23,7 +23,7 @@ public abstract class ActiveSpriteBase extends SpriteBase {
     int state;
     Animation[] animation;
 
-    public ActiveSpriteBase(Pane layer, Image image, double x, double y, double dx, double dy, double health, double damage,
+    public ActiveSpriteBase(Pane layer, Image image, double x, double y, double dx, double dy,
     					int[] duration, int[] count, double width, double height) {
 
         super(layer, image, x, y, dx, dy, width, height, true);

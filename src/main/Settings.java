@@ -31,7 +31,10 @@ public class Settings {
     
     public static final double BIN_WIDTH = 30;
     public static final double BIN_HEIGHT = 30;
+    public static final double LITTER_WIDTH = 30;
+    public static final double LITTER_HEIGHT = 30;
     
-    public static String PAUSE_BUTTON = "ESCAPE"; 
+    public static String PAUSE_BUTTON = "ESCAPE";
+	public static String PICKUP = "ENTER";
 
 }

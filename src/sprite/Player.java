@@ -18,22 +18,17 @@ public class Player extends ActiveSpriteBase {
     static int[] frameCount = {3, 3, 1, 3, 10, 10, 10, 10};
     static int[] frameDuration = {3000, 3000, 100, 3000, 1000, 1000, 1000, 1000};
     
+    boolean onLitter;
+    boolean hasLitter;
+    
     Timer timer = new Timer();
 
-    public Player(Pane layer, Image image, double x, double y, double health, double damage, double speed) {
+    public Player(Pane layer, Image image, double x, double y, double speed) {
 
-        super(layer, image, x-(Settings.PLAYER_WIDTH/2), y-(Settings.PLAYER_HEIGHT/2), 0, 0, health, damage, frameDuration, frameCount, Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT);
+        super(layer, image, x-(Settings.PLAYER_WIDTH/2), y-(Settings.PLAYER_HEIGHT/2), 0, 0, frameDuration, frameCount, Settings.PLAYER_WIDTH, Settings.PLAYER_HEIGHT);
 
         this.speed = speed;
-        //this.input = input;
-
-        //init();
     }
-
-
-    /*private void init() {
-    	
-    }*/
     
     public void handleInput(List<String> input) {
     	if (this.canMove == false) {
@@ -75,15 +70,17 @@ public class Player extends ActiveSpriteBase {
         if(state > 3 && dx == 0 && dy == 0) {
         	setState(state - 4);
         }
+        
+        if (input.contains(Settings.PICKUP)) {
+        	
+        }
     }
     
     public void moveY(int scale) {
-    	//dy += scale*(((dy+speed)*(speed-dy)/(2*speed))-speed);
     	dy = scale * speed;
     }
     
     public void moveX(int scale) {
-    	//dx += scale*((dx+speed)*((scale*speed)-dx)/(scale*speed));
     	dx = scale * speed;
     }
     
@@ -109,34 +106,11 @@ public class Player extends ActiveSpriteBase {
     			x = px;
     			y = py;
     		}
-    	} else if (otherSprite instanceof Litter) { //if player hit a Nomster
-    		stun(1);
     	}
     }
     
     public void death() {
     	//TODO
-    }
-    
-    public void stun(long duration) {
-    	//run this when stunned
-    	imageView.setEffect(hurt); //set Blend hurt as effect (in ActiveSpriteBase)
-        if(state > 3) {
-        	setState(state - 4); //change state to stand still
-        }
-    	canMove = false; //player cannot move
-        timer.schedule(new TimerTask() { //set a timer
-        	@Override
-        	public void run() {
-        		Platform.runLater(new Runnable() {
-        			public void run() {
-        				//run this when complete
-        				canMove = true;
-        				imageView.setEffect(null);
-        			}
-        		});
-        	}
-        }, duration*1000); //convert millisec to sec
     }
 
     @Override

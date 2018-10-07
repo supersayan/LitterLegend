@@ -186,7 +186,7 @@ public class Main extends Application {
         int startIndex = rand.nextInt(mazeSize);
         int endIndex = rand.nextInt(mazeSize);
         
-        player = new Player(playLayer, playerImage, (192)+offset, (192+startIndex*320)+offset, Settings.PLAYER_HEALTH, 0, Settings.PLAYER_SPEED);
+        player = new Player(playLayer, playerImage, (192)+offset, (192+startIndex*320)+offset, Settings.PLAYER_SPEED);
 		maze = new Maze(mazeSize);
 		
         playLayer.setMinSize(64+320*(mazeSize)+2*offset, 64+320*mazeSize+2*offset);
@@ -224,7 +224,7 @@ public class Main extends Application {
         for (int i=0; i<mazeSize; i++) {
         	for (int j=0; j<mazeSize; j++) {
         		if (rand.nextDouble()<Settings.NOM1_CHANCE)
-        			litters.add(new TrashLitter(playLayer, trashLitterImage, (320*i)+192-(45/2)+offset, (320*j)+192-(48/2)+offset, 0, 0, 1, 45, 48));
+        			litters.add(new TrashLitter(playLayer, trashLitterImage, (320*i)+192-(45/2)+offset, (320*j)+192-(48/2)+offset, 0, 0, Settings.LITTER_WIDTH, Settings.LITTER_HEIGHT));
         	}
         }
 
@@ -254,9 +254,6 @@ public class Main extends Application {
 	
 	private void moveSprites() { //move player and nomsters
 		player.move();
-		for(Litter nom : litters) {
-			nom.move();
-		}
 	}
 	
 	private void handleKeys() { //
@@ -285,6 +282,8 @@ public class Main extends Application {
 	    if (input.contains(Settings.PAUSE_BUTTON)) {
 	    	pauseGame();
 	    }
+	    
+	    
         
 	}
 	
@@ -348,35 +347,19 @@ public class Main extends Application {
         	if( player.collidesWith(w)) {
         		player.handleCollision(w);
             }
-        	for (Litter nom: litters) {
-        		if( nom.collidesWith(w)) {
-            		nom.handleCollision(w);
-                }
-        	}
         }
         
         for( Corner c: corners) {  
         	if( player.collidesWith(c)) {
         		player.handleCollision(c);
             }
-        	for (Litter nom: litters) {
-        		if( nom.collidesWith(c)) {
-            		nom.handleCollision(c);
-                }
-        	}
         }
         
-        for( Litter nom: litters) {  
-        	if( player.collidesWith(nom)) {  
-        		player.handleCollision(nom);
-        		nom.handleCollision(player);
+        for( Litter l: litters) {  
+        	if( player.collidesWith(l)) {  
+        		player.handleCollision(l);
+        		l.handleCollision(player);
             }
-        	for (Litter nom2: litters) {
-        		if( nom2.collidesWith(nom)) {
-            		nom2.handleCollision(nom);
-            		nom.handleCollision(nom2);
-                }
-        	}
         }
         
         for( Fog f : fog) {  
@@ -388,7 +371,7 @@ public class Main extends Application {
         for (Bin b : bin) {
         	if (player.collidesWith(b)) {
             	/*try {
-    				levelUp();
+    				levelUp(++levelnum);
     			} catch (InterruptedException e) {
     				// TODO Auto-generated catch block
     				e.printStackTrace();
@@ -399,9 +382,9 @@ public class Main extends Application {
         
     }
 	
-	private void levelUp() throws InterruptedException {
+	private void levelUp(int level) throws InterruptedException {
 		//increase level number, clear current level, and move to next
-		levelnum++;
+		levelnum = level;
 		player.setCanMove(false);
     	//gameLoop.wait(5000);
     	clearLevel();
