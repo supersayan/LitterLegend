@@ -18,10 +18,10 @@ public class Settings {
     public static double NOM1_CHANCE = 0.05;
     public static double NOM2_CHANCE = 0.01;
     
-    public static final String UP = "W";
-    public static final String DOWN = "S";
-    public static final String LEFT = "A";
-    public static final String RIGHT = "D";
+    public static String UP = "W";
+    public static String DOWN = "S";
+    public static String LEFT = "A";
+    public static String RIGHT = "D";
     
     public static final char MAX_LIVES = 3;
     
@@ -31,5 +31,7 @@ public class Settings {
     
     public static final double BIN_WIDTH = 30;
     public static final double BIN_HEIGHT = 30;
+    
+    public static String PAUSE_BUTTON = "ESCAPE"; 
 
 }

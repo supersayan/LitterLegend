@@ -69,6 +69,8 @@ public class Main extends Application {
 	List<Fog> fog = new ArrayList<>();
 	List<Bin> bin = new ArrayList<>();
 	
+	Litter inv;
+	
 	Maze maze;
 	
 	Scene scene;
@@ -225,30 +227,6 @@ public class Main extends Application {
         			litters.add(new TrashLitter(playLayer, trashLitterImage, (320*i)+192-(45/2)+offset, (320*j)+192-(48/2)+offset, 0, 0, 1, 45, 48));
         	}
         }
-        
-        //nomsters.add(new Bat(playLayer, batImage, 1600*level-192, (192+endIndex*320), (rand.nextDouble()>0.5)?6:-6, (rand.nextDouble()>0.5)?6:-6, 1, 45, 48));
-        //nomsters.add(new Bat(playLayer, batImage, 192, (192+startIndex*320), (rand.nextDouble()>0.5)?6:-6, (rand.nextDouble()>0.5)?6:-6, 1, 45, 48));
-        
-        /*for (int i=0; i<(5*levelnum); i++) { //add fog (low opacity black rectangles)
-        	for (int j=0; j<(5*levelnum); j++) {
-        		fog.add(new Fog(playLayer, 320*(j)+64+offset, 320*(i)+64+offset, 256, 256));
-        	}
-        }
-        for (int i=0; i<5*levelnum+1; i++) { //corner fog
-        	for (int j=0; j<5*levelnum+1; j++) {
-        		fog.add(new Fog(playLayer, 320*j+offset, 320*i+offset, 64, 64));
-        	}
-        }
-        for (int i=0; i<5*levelnum+1; i++) { //column fog
-        	for (int j=0; j<5*levelnum+2; j++) {
-        		fog.add(new Fog(playLayer, 320*j+offset, 64+320*i+offset, 64, 256));
-        	}
-        }
-        for (int i=0; i<(5*levelnum)+1; i++) { //row fog
-        	for (int j=0; j<(5*levelnum)+2; j++) {
-        		fog.add(new Fog(playLayer, 320*(j)+64+offset, 320*i+offset, 256, 64));
-        	}
-        }*/
 
         //add fog outside play area:
         fog.add(new Fog(playLayer, 0, 0, 2*offset+64+320*(mazeSize), offset));
@@ -262,25 +240,16 @@ public class Main extends Application {
 		playLayer.getChildren().clear();
 		for (Litter nom : litters) {
 			nom.remove();
-			//nomsters.remove(nom);
-			//nom = null;
 		}litters.clear();
 		for (Wall w : walls) {
 			w.remove();
-			//walls.remove(w);
-			//w = null;
 		}walls.clear();
 		for (Corner c : corners) {
 			c.remove();
-			//corners.remove(c); JAR -CFMV NAME-OF-JAR.JAR MANIFEST.TXT *.CLASS
-			//c = null;
 		}corners.clear();
 		for (Fog f : fog) {
 			f.remove();
-			//fog.remove(f);
-			//f = null;
 		}fog.clear();
-		//door = null;
 	}
 	
 	private void moveSprites() { //move player and nomsters
@@ -313,6 +282,9 @@ public class Main extends Application {
 	    
 	    player.handleInput(input);
 	    
+	    if (input.contains(Settings.PAUSE_BUTTON)) {
+	    	pauseGame();
+	    }
         
 	}
 	
@@ -324,6 +296,7 @@ public class Main extends Application {
 			c.update();
         for (Litter n : litters)
         	n.update();
+        
 	}
 	
 	private void checkRemovables() { //removes objects that are set to removable
@@ -352,12 +325,7 @@ public class Main extends Application {
 	private void updateCam() {
 	    // set camera coordinates based on player position
 		cameraX = player.getX()-Settings.SCENE_WIDTH/2+Settings.PLAYER_WIDTH/2;
-		cameraY = player.getY()-Settings.SCENE_HEIGHT/2+Settings.PLAYER_HEIGHT/2;
-	    //cameraX = ((player.getX() )-64)*(camera.getHmax()/(camera.getHmax()-128-Settings.PLAYER_WIDTH-16));
-		//cameraY = ((player.getY() )-64)*(camera.getVmax()/(camera.getVmax()-128-Settings.PLAYER_HEIGHT-16));
-		//System.out.println("player: " + player.getX() + " " + player.getY() + " " + playLayer.getWidth() + " " + playLayer.getHeight());
-		//System.out.println("camera: " + cameraX + " " + cameraY + " " + camera.getHmax() + " " + camera.getVmax());
-		
+		cameraY = player.getY()-Settings.SCENE_HEIGHT/2+Settings.PLAYER_HEIGHT/2;		
 		
 		if (cameraX < 0)
 			cameraX = 0;
@@ -369,8 +337,6 @@ public class Main extends Application {
 		if (cameraY > (camera.getVmax()))
 			cameraY = (camera.getVmax());
 		
-		//System.out.println(cameraX + " " + cameraY);
-		
 		camera.setHvalue(cameraX);
 		camera.setVvalue(cameraY);
 		
@@ -378,7 +344,7 @@ public class Main extends Application {
 	
 	private void checkCollisions() {
         // if sprites collide delegate to their respective objects
-        for( Wall w: walls) {  
+        for( Wall w: walls) {
         	if( player.collidesWith(w)) {
         		player.handleCollision(w);
             }
@@ -444,18 +410,18 @@ public class Main extends Application {
     	player.setCanMove(true);
 	}
 	
-	/*private void pauseGame() {
-		  gamePaused = true;  
+	private void pauseGame() {
+		  //gamePaused = true;  
 		  gameLoop.stop(); 
 	}
 	
 	private void resumeGame() {  
-		gamePaused = false;  
+		//gamePaused = false;  
 		gameLoop.start();  
 	}
 	
 	private void stopGame() throws Exception {
 		stop();
-	}*/
+	}
 	
 }
