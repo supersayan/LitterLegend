@@ -35,6 +35,10 @@ public abstract class SpriteBase extends NodeBase {
         	addToLayer();
         
     }
+    
+    public SpriteBase(Pane layer, Image image, double x, double y, double width, double height, boolean animated) {
+    	this(layer, image, x, y, 0, 0, width, height, animated);
+    }
 
     public void addToLayer() {
         this.layer.getChildren().add(this.imageView);

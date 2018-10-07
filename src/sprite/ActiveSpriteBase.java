@@ -159,18 +159,6 @@ public abstract class ActiveSpriteBase extends SpriteBase {
     	}
     }
     
-    Blend hurt = new Blend(
-    	BlendMode.MULTIPLY,
-    	new ColorAdjust(),
-    	new ColorInput(
-    			0,
-                0,
-                Settings.PLAYER_WIDTH,
-                Settings.PLAYER_HEIGHT,
-                Color.RED
-            )
-    );
-    
     public abstract void handleCollision(SpriteBase other);
 
 }

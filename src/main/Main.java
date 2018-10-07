@@ -127,10 +127,8 @@ public class Main extends Application {
 		gameLoop = new AnimationTimer() { 
 		
 			@Override  
-			public void handle(long l) {  
+			public void handle(long l) {
 				
-				//System.out.println("x: " + player.getX() + ", y: " + player.getY());
-
 				handleKeys(); //handle input keys
 	 
 	            moveSprites(); //
@@ -314,10 +312,10 @@ public class Main extends Application {
 				fog.remove(f);
 				f = null;
 			}
-		for (Litter nom : litters)
-			if (nom.isRemovable()) {
-				nom.remove();
-				nom = null;
+		for (Litter l : litters)
+			if (l.isRemovable()) {
+				l.remove();
+				l = null;
 			}
 	}
 	
@@ -360,22 +358,23 @@ public class Main extends Application {
         		player.handleCollision(l);
         		l.handleCollision(player);
             }
+        	if (player.collidesWith(l) && input.contains(Settings.PICKUP) && inv != null) {
+        		inv = l;
+        		l.setRemovable(true);
+        	}
         }
         
-        for( Fog f : fog) {  
+        /*for( Fog f : fog) {  
         	if( player.collidesWith(f)) {  
         		f.remove();
             }
-        }
+        }*/
         
         for (Bin b : bin) {
-        	if (player.collidesWith(b)) {
-            	/*try {
-    				levelUp(++levelnum);
-    			} catch (InterruptedException e) {
-    				// TODO Auto-generated catch block
-    				e.printStackTrace();
-    			}*/
+        	if (player.collidesWith(b) && input.contains(Settings.PICKUP) && inv != null) {
+            	// if bin and litter are of same type (trash, recycling, or compost)
+        		// then 
+        		inv = null;
             }
         }
         
