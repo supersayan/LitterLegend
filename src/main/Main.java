@@ -16,13 +16,14 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import maze.Corner;
-import maze.Door;
 import maze.Fog;
 import maze.Maze;
 import maze.Wall;
-import sprite.TrashBin;
+import sprite.TrashLitter;
 import sprite.Bin;
+import sprite.Litter;
 import sprite.Player;
+import sprite.TrashBin;
 
 /**
  * @author Sayan Dutta
@@ -44,7 +45,8 @@ public class Main extends Application {
 	
     Image playerImage;
 	Image cornerImage, wallVImage, wallHImage;
-	Image batImage;
+	Image trashBinImage, recycleBinImage;
+	Image trashLitterImage;
 	static Player player;
 	
 	static Random rand = new Random();
@@ -61,11 +63,11 @@ public class Main extends Application {
 	
 	ArrayList<String> input = new ArrayList<String>();
 	
-	List<Bin> bins = new ArrayList<>();
+	List<Litter> litters = new ArrayList<>();
 	List<Wall> walls = new ArrayList<>();
 	List<Corner> corners = new ArrayList<>();
 	List<Fog> fog = new ArrayList<>();
-	Door door;
+	List<Bin> bin = new ArrayList<>();
 	
 	Maze maze;
 	
@@ -163,7 +165,10 @@ public class Main extends Application {
         cornerImage = new Image( getClass().getResource("/assets/environment/corner.png").toExternalForm());
         wallVImage = new Image( getClass().getResource("/assets/environment/vertical.png").toExternalForm());
         wallHImage = new Image( getClass().getResource("/assets/environment/horizontal.png").toExternalForm());
-        batImage = new Image(getClass().getResource("/assets/nomsters/bat.png").toExternalForm());
+        trashBinImage = new Image(getClass().getResource("/assets/nomsters/bat.png").toExternalForm());
+        //recycleBinImage = new Image(getClass().getResource("/assets/").toExternalForm());
+        trashLitterImage = new Image(getClass().getResource("/assets/nomsters/bat.png").toExternalForm());
+        //recycleLitterImage = new Image(getClass().getResource("/assets/").toExternalForm());
         
         playLayer.setStyle("-fx-background-image: url('assets/environment/background.png');");
 		
@@ -188,7 +193,7 @@ public class Main extends Application {
 	    camera.setHmax(64+320*(mazeSize)+2*offset-Settings.SCENE_WIDTH);
 	    camera.setVmax(64+320*(mazeSize)+2*offset-Settings.SCENE_HEIGHT);
 
-        door = new Door(playLayer, 320*(mazeSize-1)+142+offset, 320*(endIndex)+142+offset);
+        bin.add(new TrashBin(playLayer, trashBinImage, 320*(mazeSize-1)+142+offset, 320*(endIndex)+142+offset, 0, 0, Settings.BIN_WIDTH, Settings.BIN_HEIGHT));
         
         for (int i=0; i<mazeSize+1; i++) {
         	for (int j=0; j<mazeSize+1; j++) { //add corners
@@ -217,7 +222,7 @@ public class Main extends Application {
         for (int i=0; i<mazeSize; i++) {
         	for (int j=0; j<mazeSize; j++) {
         		if (rand.nextDouble()<Settings.NOM1_CHANCE)
-        			bins.add(new TrashBin(playLayer, batImage, (320*i)+192-(45/2)+offset, (320*j)+192-(48/2)+offset, (rand.nextDouble()>0.5)?4:-4, (rand.nextDouble()>0.5)?4:-4, 1, 45, 48));
+        			litters.add(new TrashLitter(playLayer, trashLitterImage, (320*i)+192-(45/2)+offset, (320*j)+192-(48/2)+offset, 0, 0, 1, 45, 48));
         	}
         }
         
@@ -255,11 +260,11 @@ public class Main extends Application {
 
 	private void clearLevel() { //clear map
 		playLayer.getChildren().clear();
-		for (Bin nom : bins) {
+		for (Litter nom : litters) {
 			nom.remove();
 			//nomsters.remove(nom);
 			//nom = null;
-		}bins.clear();
+		}litters.clear();
 		for (Wall w : walls) {
 			w.remove();
 			//walls.remove(w);
@@ -280,7 +285,7 @@ public class Main extends Application {
 	
 	private void moveSprites() { //move player and nomsters
 		player.move();
-		for(Bin nom : bins) {
+		for(Litter nom : litters) {
 			nom.move();
 		}
 	}
@@ -317,7 +322,7 @@ public class Main extends Application {
 			w.update();
 		for (Corner c : corners)
 			c.update();
-        for (Bin n : bins)
+        for (Litter n : litters)
         	n.update();
 	}
 	
@@ -337,7 +342,7 @@ public class Main extends Application {
 				fog.remove(f);
 				f = null;
 			}
-		for (Bin nom : bins)
+		for (Litter nom : litters)
 			if (nom.isRemovable()) {
 				nom.remove();
 				nom = null;
@@ -377,7 +382,7 @@ public class Main extends Application {
         	if( player.collidesWith(w)) {
         		player.handleCollision(w);
             }
-        	for (Bin nom: bins) {
+        	for (Litter nom: litters) {
         		if( nom.collidesWith(w)) {
             		nom.handleCollision(w);
                 }
@@ -388,19 +393,19 @@ public class Main extends Application {
         	if( player.collidesWith(c)) {
         		player.handleCollision(c);
             }
-        	for (Bin nom: bins) {
+        	for (Litter nom: litters) {
         		if( nom.collidesWith(c)) {
             		nom.handleCollision(c);
                 }
         	}
         }
         
-        for( Bin nom: bins) {  
+        for( Litter nom: litters) {  
         	if( player.collidesWith(nom)) {  
         		player.handleCollision(nom);
         		nom.handleCollision(player);
             }
-        	for (Bin nom2: bins) {
+        	for (Litter nom2: litters) {
         		if( nom2.collidesWith(nom)) {
             		nom2.handleCollision(nom);
             		nom.handleCollision(nom2);
@@ -414,14 +419,17 @@ public class Main extends Application {
             }
         }
         
-        if (player.collidesWith(door)) {
-        	try {
-				levelUp();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+        for (Bin b : bin) {
+        	if (player.collidesWith(b)) {
+            	/*try {
+    				levelUp();
+    			} catch (InterruptedException e) {
+    				// TODO Auto-generated catch block
+    				e.printStackTrace();
+    			}*/
+            }
         }
+        
         
     }
 	

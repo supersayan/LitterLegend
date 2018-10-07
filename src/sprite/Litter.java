@@ -5,11 +5,13 @@ import maze.Wall;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 
-public abstract class Bin extends SpriteBase {
-	
-	public Bin(Pane layer, Image image, double x, double y, double dx,
-			double dy, double width, double height) {
-		super(layer, image, x, y, dx, dy, width, height, false);
+public abstract class Litter extends ActiveSpriteBase {
+
+	public Litter(Pane layer, Image image, double x, double y, double dx,
+			double dy, double health, double damage, int[] duration, int[] count,
+			double width, double height) {
+		super(layer, image, x, y, dx, dy, health, damage, duration, count,
+				width, height);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -36,7 +38,7 @@ public abstract class Bin extends SpriteBase {
         		dy = -dy;
         	}
     	} else if (otherSprite instanceof Player) {
-    		//setState(1);
+    		setState(1);
     	}
 	}
 	

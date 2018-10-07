@@ -109,7 +109,7 @@ public class Player extends ActiveSpriteBase {
     			x = px;
     			y = py;
     		}
-    	} else if (otherSprite instanceof Bin) { //if player hit a Nomster
+    	} else if (otherSprite instanceof Litter) { //if player hit a Nomster
     		stun(1);
     	}
     }

@@ -28,5 +28,8 @@ public class Settings {
     //public static final int LEVEL_SIZE_MULT = 5;
     public static final int LEVEL_SIZE_ADD = 0; //add size by this for each level
     public static final int LEVEL_SIZE_START = 5; //size of level one
+    
+    public static final double BIN_WIDTH = 30;
+    public static final double BIN_HEIGHT = 30;
 
 }
